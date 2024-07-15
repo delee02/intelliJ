@@ -3,6 +3,7 @@ package com.example.simple_board.board.db;
 import com.example.simple_board.post.db.PostEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import java.util.List;
 
@@ -25,5 +26,6 @@ public class BoardEntity {
     @OneToMany(
             mappedBy = "board"
     )
+    @Where(clause = "status = 'REGISTERED'") //조건절 달 수 있음
     private List<PostEntity> postList = List.of();
 }

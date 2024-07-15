@@ -7,6 +7,8 @@ import com.example.simple_board.board.model.BoardRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -26,6 +28,9 @@ public class BoardService {
         return boardConverter.toDto(saveEntiity);
     }
 
+    public List<BoardEntity> all(){
+        return boardRepository.findAll();
+    }
     public BoardDto view(Long id){
         var entity = boardRepository.findById(id).get();
         return boardConverter.toDto(entity);

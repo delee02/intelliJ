@@ -1,14 +1,18 @@
 package com.example.simple_board.post.service;
 
 import com.example.simple_board.board.db.BoardRepository;
+import com.example.simple_board.common.Api;
+import com.example.simple_board.common.Pagination;
 import com.example.simple_board.post.db.PostEntity;
 import com.example.simple_board.post.db.PostRepository;
 import com.example.simple_board.post.model.PostRequest;
 import com.example.simple_board.post.model.PostViewRequest;
 import com.example.simple_board.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -54,9 +58,10 @@ public class PostService {
                         throw new RuntimeException(String.format(format, it.getPassword(), postViewRequest.getPassword()));
                     }
 
-                    //답변글 같이 적용
+                   /* 이제 이거 할 필요가 없음 이유는 postEntity replyList에서 가져오기때문?
+                   //답변글 같이 적용
                     var replyList = replyService.findAllReplyByPostId(it.getId());
-                    it.setReplyList(replyList);
+                    it.setReplyList(replyList);*/
                     return it;
                 }).orElseThrow(
                         () -> {
@@ -65,8 +70,23 @@ public class PostService {
                 );
     }
 
-    public List<PostEntity> all() {
-        return postRepository.findAll();
+    public Api<List<PostEntity>> all(Pageable pageable) {
+        var list = postRepository.findAll((Sort) pageable);
+
+        var pagination =  Pagination.builder()
+                .page(list.)
+                .size()
+                .currentElement()
+                .totalElement()
+                .totalPage()
+                .build();
+
+        var response = Api.<List<PostEntity>>builder()
+                .body(list.toList)
+                .pagination()
+                .build();
+
+        return
     }
 
     public void delete(PostViewRequest postViewRequest) {
